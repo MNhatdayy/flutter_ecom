@@ -36,7 +36,24 @@ class BaseClient {
       throw ApiNotRespondingException('API not responded in time', uri.toString());
     }
   }
-
+  Future<dynamic> getPayload(String baseUrl, String api, dynamic payloadObj) async {
+    var uri = Uri.parse(baseUrl + api);
+    var payload = jsonEncode(payloadObj);
+    try {
+      var response = await http
+          .post(
+        uri,
+        body: payload,
+        headers: {"Content-Type": "application/json"}, // Header JSON
+      )
+          .timeout(Duration(seconds: TIME_OUT_DURATION));
+      return _processResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet connection', uri.toString());
+    } on TimeoutException {
+      throw ApiNotRespondingException('API not responded in time', uri.toString());
+    }
+  }
   Future<dynamic> put(String baseUrl, String api, dynamic payloadObj) async {
     var uri = Uri.parse(baseUrl + api);
     var payload = jsonEncode(payloadObj); // Sử dụng jsonEncode để serialize payloadObj

@@ -14,12 +14,10 @@ class AuthService {
     final response = await _baseClient.post(AppConfig.baseUrl,authEnpoints().login ,payload);
     if (response != null) {
       try {
-        // Chuyển đổi dữ liệu trả về nếu cần thiết (nếu là chuỗi JSON)
         final Map<String, dynamic> jsonResponse = jsonDecode(response);
 
-        // Kiểm tra xem token có trong response hay không
         if (jsonResponse.containsKey('token')) {
-          return jsonResponse['token']; // Hoặc trả về toàn bộ dữ liệu nếu cần
+          return jsonResponse['token'];
         } else {
           throw Exception('Token không có trong phản hồi');
         }
@@ -33,10 +31,11 @@ class AuthService {
   }
 
   // Đăng ký
-  Future<dynamic> register(String username, String email, String password) async {
+  Future<dynamic> register(String username, String email, String phone, String password) async {
     final Map<String, dynamic> payload = {
       'username': username,
       'email': email,
+      'phone': phone,
       'password': password,
     };
     return await _baseClient.post(AppConfig.baseUrl,authEnpoints().register, payload);
@@ -51,11 +50,13 @@ class AuthService {
     }
   }
 
-  // Future<dynamic> getCurrentUser() async {
-  //   return await _apiService.get('/auth/me');
-  // }
+  Future<dynamic> getCurrentUser(String token) async {
+    final Map<String, dynamic> payload = {
+      'token': token,
+    };
+    return await _baseClient.getPayload(AppConfig.baseUrl,authEnpoints().me, payload);
+  }
 
-  // Lưu token vào bộ nhớ (ví dụ: SharedPreferences hoặc SecureStorage)
   Future<void> saveToken(String token) async {
     // Sử dụng SharedPreferences để lưu token
     final prefs = await SharedPreferences.getInstance();

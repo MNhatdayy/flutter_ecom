@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/services/authService.dart';
 import 'dart:convert';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -45,23 +46,30 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Username input field
             TextField(
               controller: _usernameController,
               decoration: const InputDecoration(labelText: 'Username'),
             ),
             const SizedBox(height: 16),
+
+            // Password input field
             TextField(
               controller: _passwordController,
               decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
             const SizedBox(height: 16),
+
+            // Error message display
             if (_errorMessage != null)
               Text(
                 _errorMessage!,
                 style: const TextStyle(color: Colors.red),
               ),
             const SizedBox(height: 16),
+
+            // Login button
             ElevatedButton(
               onPressed: _isLoading ? null : _handleLogin,
               child: _isLoading
@@ -69,6 +77,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Colors.white,
               )
                   : const Text('Login'),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Register redirect button
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/register'); // Đổi tên màn hình đăng ký tại đây
+                },
+                child: const Text(
+                  'Don\'t have an account? Register here',
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
             ),
           ],
         ),
