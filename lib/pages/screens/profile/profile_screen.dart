@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/pages/screens/address/address_screen.dart';
+import 'package:flutter_ecom/pages/screens/cartitem/cartitem_screen.dart';
 
 import '../../../core/services/AuthService.dart';
 
@@ -91,13 +93,25 @@ class ProfileScreen extends StatelessWidget {
               leading: const Icon(Icons.location_on, color: Colors.black),
               title: const Text("Địa chỉ", style: TextStyle(color: Colors.black)),
               subtitle: const Text("Thêm địa chỉ giao hàng", style: TextStyle(color: Colors.grey)),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddressScreen())
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.shopping_cart, color: Colors.black),
               title: const Text("Giỏ hàng", style: TextStyle(color: Colors.black)),
               subtitle: const Text("Thêm và xóa sản phẩm khỏi giỏ hàng", style: TextStyle(color: Colors.grey)),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CartItemScreen()),
+                );
+
+              },
+
             ),
             ListTile(
               leading: const Icon(Icons.receipt, color: Colors.black),

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/pages/auth/LoginScreen.dart';
-import 'package:flutter_ecom/pages/HomeScreen.dart'; // Import HomeScreen (giả sử bạn có màn hình chính)
+import 'package:flutter_ecom/pages/HomeScreen.dart';
 import 'package:flutter_ecom/pages/auth/RegisterScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/login', // Đặt tuyến ban đầu là LoginScreen
+      initialRoute: '/home',
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),

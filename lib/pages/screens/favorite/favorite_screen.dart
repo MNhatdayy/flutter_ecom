@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/pages/layout/component/header.dart';
 
 class FavoriteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Yêu thích"),
-        backgroundColor: Colors.redAccent,
       ),
       body: Center(
         child: Column(
