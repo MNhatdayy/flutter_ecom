@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../layout/component/headers.dart';
+
 class StoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Cửa hàng"),
-        backgroundColor: Colors.orange,
+      appBar: Headers(
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(8),

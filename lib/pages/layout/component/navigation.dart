@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 
 import '../../screens/explore/explore_screen.dart';
-import '../../screens/favorite/favorite_screen.dart';
-import '../../screens/message/message_screen.dart';
+import '../../screens/contact/contact_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 import '../../screens/store/store_screen.dart';
 
@@ -17,11 +16,12 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int currentIndex = 0;
 
+  // Remove FavoriteScreen and update the list of screens
   final List<Widget> _screens = [
     ExploreScreen(),
-    FavoriteScreen(),
-    MessageScreen(),
     StoreScreen(),
+    // Removed FavoriteScreen(),
+    ContactScreen(),
     ProfileScreen(),
   ];
 
@@ -54,16 +54,14 @@ class _NavigationState extends State<Navigation> {
           onTap: _onTap,
           items: const [
             BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.grid_view),
             ),
+            // Removed the Favorite tab item
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.message),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.store),
+              icon: Icon(Icons.mail),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),

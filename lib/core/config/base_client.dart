@@ -101,4 +101,5 @@ class BaseClient {
         FetchDataException(utf8.decode(response.bodyBytes), response.request?.url.toString());
     }
   }
+
 }

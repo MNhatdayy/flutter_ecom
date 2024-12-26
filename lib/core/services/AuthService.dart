@@ -41,7 +41,7 @@ class AuthService {
 
   Future<void> logout() async {
     try {
-      await _baseClient.post(AppConfig.baseUrl,authEnpoints().register, {});
+      await _baseClient.post(AppConfig.baseUrl,authEnpoints().logout, {});
     } catch (e) {
       rethrow;
     }

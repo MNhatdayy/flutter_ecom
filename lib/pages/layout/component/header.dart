@@ -36,33 +36,21 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
-        // Nút Lọc Sản Phẩm
-        IconButton(
-          icon: const Icon(Icons.filter_list, color: Colors.white), // Biểu tượng lọc màu trắng
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => ProductFilterDialog(),
-            );
-          },
-        ),
-        // Nút Thông Báo
-        IconButton(
-          icon: const Icon(Icons.notifications, color: Colors.white), // Biểu tượng thông báo màu trắng
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => NotificationModal(),
-            );
-          },
-        ),
-        // Nút Giỏ Hàng
         IconButton(
           icon: const Icon(Icons.shopping_cart, color: Colors.white), // Biểu tượng giỏ hàng màu trắng
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => CartItemScreen()),
+            );
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.notifications, color: Colors.white), // Biểu tượng thông báo màu trắng
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => NotificationModal(),
             );
           },
         ),
@@ -123,48 +111,6 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           ],
         );
       },
-    );
-  }
-}
-
-// Hộp thoại lọc sản phẩm
-class ProductFilterDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Colors.grey[900], // Nền hộp thoại màu xám đậm
-      title: const Text(
-        "Chọn loại sản phẩm",
-        style: TextStyle(color: Colors.white), // Tiêu đề màu trắng
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: const [
-          ListTile(
-            leading: Icon(Icons.phone_android, color: Colors.white), // Biểu tượng màu trắng
-            title: Text("Điện thoại", style: TextStyle(color: Colors.white)), // Văn bản màu trắng
-          ),
-          ListTile(
-            leading: Icon(Icons.computer, color: Colors.white),
-            title: Text("Máy tính", style: TextStyle(color: Colors.white)),
-          ),
-          ListTile(
-            leading: Icon(Icons.headphones, color: Colors.white),
-            title: Text("Phụ kiện", style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text(
-            "Đóng",
-            style: TextStyle(color: Colors.redAccent), // Nút đóng màu đỏ
-          ),
-        ),
-      ],
     );
   }
 }
