@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/services/authService.dart';
+import 'package:flutter_ecom/core/DTO/request/auth/LoginRequest.dart';
+import '../../core/services/AuthService.dart';
 import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
@@ -16,11 +17,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _handleLogin() async {
     try {
-      final token = await _authService.login(_usernameController.text, _passwordController.text);
-      print(token);
-      if (token != null) {
+      LoginRequest request = LoginRequest(
+        username: _usernameController.text,
+        password: _passwordController.text,
+      );
+      final response = await _authService.login(request);
+      if (response != null) {
         // Lưu token và chuyển hướng người dùng
-        await _authService.saveToken(token);
+        await _authService.saveToken(response.token);
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         setState(() {
@@ -28,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     } catch (e) {
-      // Xử lý lỗi khi đăng nhập
+
       setState(() {
         _errorMessage = "Error: $e";
       });
