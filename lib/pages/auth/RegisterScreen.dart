@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/services/authService.dart';
+import 'package:flutter_ecom/core/DTO/request/auth/RegisterRequest.dart';
+import '../../core/services/AuthService.dart';
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
@@ -29,7 +30,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if(_passwordController.text != _confirmPasswordController.text){
           _errorMessage = "Password and confirm password not match";
         }
-        final newUser = await _authService.register(_usernameController.text,_emailController.text, _phoneController.text, _passwordController.text);
+        RegisterRequest request = new RegisterRequest(username: _usernameController.text, email: _emailController.text, phone: _phoneController.text, password: _passwordController.text);
+        final newUser = await _authService.register(request);
         if(newUser == null){
           _errorMessage = "Invalid username or password.";
         }
