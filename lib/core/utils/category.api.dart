@@ -1,4 +1,4 @@
-class categoryEnpoins{
+class categoryEndpoints{
   final String getById = "/categories/";
-  final String getAll = "/categories/all";
+  final String getAll = "/categories";
 }
