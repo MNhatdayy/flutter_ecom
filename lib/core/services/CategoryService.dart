@@ -11,7 +11,7 @@ class CategoryService {
   final BaseClient _baseClient = BaseClient();
   Future<List<CategoryResponse>> GetAllCategory() async{
     try{
-      final response = await _baseClient.get(AppConfig.baseUrl, categoryEnpoins().getAll);
+      final response = await _baseClient.get(AppConfig.baseUrl, categoryEndpoints().getAll);
       if(response != null ){
         final List<dynamic> jsonResponse = jsonDecode(response);
         return jsonResponse.map((json) => CategoryResponse.fromJson(json)).toList();
@@ -25,7 +25,7 @@ class CategoryService {
   }
   Future<CategoryResponse> GetCategoryById(int id) async{
     try{
-      final response = await _baseClient.get(AppConfig.baseUrl, categoryEnpoins().getById+"/$id");
+      final response = await _baseClient.get(AppConfig.baseUrl, categoryEndpoints().getById+"/$id");
       if(response != null ){
         return CategoryResponse.fromJson(response);
       }else{
