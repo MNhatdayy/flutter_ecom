@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_ecom/core/DTO/response/CategoryResponse.dart';
 import 'package:flutter_ecom/core/config/base_client.dart';
 import 'package:flutter_ecom/core/config/config.dart';
-import 'package:flutter_ecom/core/utils/category.api.dart';
+import 'package:flutter_ecom/core/utils/api/category.api.dart';
 
 import '../config/config.dart';
 
