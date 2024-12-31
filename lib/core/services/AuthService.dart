@@ -1,8 +1,9 @@
 import 'package:flutter_ecom/core/DTO/request/auth/LoginRequest.dart';
 import 'package:flutter_ecom/core/DTO/request/auth/RegisterRequest.dart';
 import 'package:flutter_ecom/core/DTO/response/auth/TokenResponse.dart';
+import 'package:flutter_ecom/core/DTO/response/userResponse.dart';
 
-import '../utils/auth.api.dart';
+import '../utils/api/auth.api.dart';
 import '../config/base_client.dart';
 import '../config/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,11 +48,25 @@ class AuthService {
     }
   }
 
-  Future<dynamic> getCurrentUser(String token) async {
+  Future<UserResponse> getCurrentUser(String? token) async {
     final Map<String, dynamic> payload = {
       'token': token,
     };
-    return await _baseClient.getPayload(AppConfig.baseUrl,authEnpoints().me, payload);
+    try{
+      var response =  await _baseClient.post(AppConfig.baseUrl,authEnpoints().me, payload);
+      if (response) {
+        final Map<String, dynamic> jsonResponse = jsonDecode(response);
+        print(jsonResponse);
+        return UserResponse.fromJson(jsonResponse);
+
+      } else {
+        throw Exception('Không nhận được phản hồi từ API');
+      }
+    }catch(e) {
+      print('Không thể lấy thông tin $e');
+      throw Exception('Không thể lấy thông tin');
+    }
+
   }
 
   Future<void> saveToken(String token) async {

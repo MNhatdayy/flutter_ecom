@@ -146,7 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your phone number';
                     }
-                    if (!RegExp(r'^\d{10,15}\$').hasMatch(value)) {
+                    if (value.length < 9 || value.length > 15) {
                       return 'Please enter a valid phone number';
                     }
                     return null;

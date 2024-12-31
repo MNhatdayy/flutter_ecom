@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/core/DTO/response/userResponse.dart';
 import 'package:flutter_ecom/pages/screens/address/address_screen.dart';
 import 'package:flutter_ecom/pages/screens/cartitem/cartitem_screen.dart';
 
@@ -6,179 +9,189 @@ import '../../../core/services/AuthService.dart';
 
 class ProfileScreen extends StatelessWidget {
   final AuthService _authService = AuthService();
+
+  Future<UserResponse> _fetchUserData() async {
+    String? token = await _authService.getToken();
+
+    return await _authService.getCurrentUser(token);
+  }
+
   Future<void> _showLogoutConfirmation(BuildContext context) async {
-    // Hiển thị modal xác nhận
     final shouldLogout = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Xác nhận'),
-          content: Text('Bạn có chắc chắn muốn đăng xuất không?'),
+          title: const Text('Xác nhận'),
+          content: const Text('Bạn có chắc chắn muốn đăng xuất không?'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false); // Không đăng xuất
+                Navigator.of(context).pop(false);
               },
-              child: Text('Hủy'),
+              child: const Text('Hủy'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(true); // Xác nhận đăng xuất
+                Navigator.of(context).pop(true);
               },
-              child: Text('Đăng xuất'),
+              child: const Text('Đăng xuất'),
             ),
           ],
         );
       },
     );
 
-    // Kiểm tra kết quả từ modal
     if (shouldLogout == true) {
-      await _authService.logout(); // Gọi hàm logout
-      await _authService.deleteToken(); // Xóa token khỏi bộ nhớ
-
-      // Điều hướng về màn hình đăng nhập (hoặc xử lý tùy theo ứng dụng của bạn)
+      await _authService.logout();
+      await _authService.deleteToken();
       Navigator.of(context).pushReplacementNamed('/login');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Phần avatar và thông tin người dùng
-            Container(
-              padding: const EdgeInsets.all(20),
-              alignment: Alignment.center,
-              color: Colors.black,
+      body: FutureBuilder<UserResponse>(
+        future: _fetchUserData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text("Lỗi khi tải dữ liệu người dùng."));
+          } else if (snapshot.hasData) {
+            final user = snapshot.data!;
+            final avatarUrl = user.avatar ?? '';
+
+            return SingleChildScrollView(
               child: Column(
-                children: const [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, size: 40, color: Colors.black),
-                  ),
-                  SizedBox(height: 15),
-                  Text(
-                    "Nguyễn Văn A",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Phần avatar và thông tin người dùng
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    alignment: Alignment.center,
+                    color: Colors.black,
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white,
+                          backgroundImage: avatarUrl.isNotEmpty
+                              ? NetworkImage(avatarUrl)
+                              : null,
+                          child: avatarUrl.isEmpty
+                              ? const Icon(Icons.person, size: 40, color: Colors.black)
+                              : null,
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          user.username ?? 'Không có tên',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          user.email ?? 'Không có email',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    "example@gmail.com",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
+
+                  // Các phần khác của giao diện
+                  const Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Text(
+                      "Cài đặt tài khoản",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.location_on, color: Colors.black),
+                    title: const Text("Địa chỉ", style: TextStyle(color: Colors.black)),
+                    subtitle: const Text("Thêm địa chỉ giao hàng", style: TextStyle(color: Colors.grey)),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AddressScreen()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.shopping_cart, color: Colors.black),
+                    title: const Text("Giỏ hàng", style: TextStyle(color: Colors.black)),
+                    subtitle: const Text("Thêm và xóa sản phẩm khỏi giỏ hàng", style: TextStyle(color: Colors.grey)),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CartItemScreen()),
+                      );
+                    },
+                  ),
+                  // Các mục khác...
+                  // Phần Cài đặt ứng dụng
+                  const Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Text(
+                      "Cài đặt ứng dụng",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.dark_mode, color: Colors.black),
+                    title: const Text("Nền tối", style: TextStyle(color: Colors.black)),
+                    subtitle: const Text("Chỉnh màu nền của ứng dụng", style: TextStyle(color: Colors.grey)),
+                    trailing: Switch(
+                      value: false,
+                      onChanged: (value) {},
+                      activeColor: Colors.black,
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.help, color: Colors.black),
+                    title: const Text("Hướng dẫn sử dụng", style: TextStyle(color: Colors.black)),
+                    subtitle: const Text("Xem video hướng dẫn sử dụng ứng dụng", style: TextStyle(color: Colors.grey)),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.policy, color: Colors.black),
+                    title: const Text("Chính sách tài khoản", style: TextStyle(color: Colors.black)),
+                    subtitle: const Text("Xem chính sách tài khoản", style: TextStyle(color: Colors.grey)),
+                    onTap: () {},
+                  ),
+                  // Nút Đăng xuất
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        minimumSize: const Size(double.infinity, 45),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        _showLogoutConfirmation(context);
+                      },
+                      child: const Text(
+                        "Đăng xuất",
+                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-
-            // Phần Cài đặt tài khoản
-            const Padding(
-              padding: EdgeInsets.all(15),
-              child: Text(
-                "Cài đặt tài khoản",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.location_on, color: Colors.black),
-              title: const Text("Địa chỉ", style: TextStyle(color: Colors.black)),
-              subtitle: const Text("Thêm địa chỉ giao hàng", style: TextStyle(color: Colors.grey)),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddressScreen())
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.shopping_cart, color: Colors.black),
-              title: const Text("Giỏ hàng", style: TextStyle(color: Colors.black)),
-              subtitle: const Text("Thêm và xóa sản phẩm khỏi giỏ hàng", style: TextStyle(color: Colors.grey)),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CartItemScreen()),
-                );
-
-              },
-
-            ),
-            ListTile(
-              leading: const Icon(Icons.receipt, color: Colors.black),
-              title: const Text("Đơn đặt hàng", style: TextStyle(color: Colors.black)),
-              subtitle: const Text("Xem thông tin đơn đặt hàng", style: TextStyle(color: Colors.grey)),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.card_giftcard, color: Colors.black),
-              title: const Text("Mã giảm giá", style: TextStyle(color: Colors.black)),
-              subtitle: const Text("Xem danh sách mã giảm giá", style: TextStyle(color: Colors.grey)),
-              onTap: () {},
-            ),
-
-            // Phần Cài đặt ứng dụng
-            const Padding(
-              padding: EdgeInsets.all(15),
-              child: Text(
-                "Cài đặt ứng dụng",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.dark_mode, color: Colors.black),
-              title: const Text("Nền tối", style: TextStyle(color: Colors.black)),
-              subtitle: const Text("Chỉnh màu nền của ứng dụng", style: TextStyle(color: Colors.grey)),
-              trailing: Switch(
-                value: false,
-                onChanged: (value) {},
-                activeColor: Colors.black,
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.help, color: Colors.black),
-              title: const Text("Hướng dẫn sử dụng", style: TextStyle(color: Colors.black)),
-              subtitle: const Text("Xem video hướng dẫn sử dụng ứng dụng", style: TextStyle(color: Colors.grey)),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.policy, color: Colors.black),
-              title: const Text("Chính sách tài khoản", style: TextStyle(color: Colors.black)),
-              subtitle: const Text("Xem chính sách tài khoản", style: TextStyle(color: Colors.grey)),
-              onTap: () {},
-            ),
-
-            // Nút Đăng xuất
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size(double.infinity, 45),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  _showLogoutConfirmation(context);
-                },
-                child: const Text(
-                  "Đăng xuất",
-                  style: TextStyle(fontSize: 14, color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
+            );
+          } else {
+            return const Center(child: Text("Không có dữ liệu người dùng."));
+          }
+        },
       ),
     );
   }

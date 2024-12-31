@@ -1,8 +1,8 @@
-import 'package:flutter_ecom/core/DTO/request/userRequest.dart';
+import 'package:flutter_ecom/core/DTO/request/UserRequest.dart';
 import 'package:flutter_ecom/core/DTO/response/userResponse.dart';
 import 'package:flutter_ecom/core/config/base_client.dart';
 import 'package:flutter_ecom/core/config/config.dart';
-import 'package:flutter_ecom/core/utils/user.api.dart';
+import 'package:flutter_ecom/core/utils/api/user.api.dart';
 
 class UserServices{
   final BaseClient _baseClient = BaseClient();

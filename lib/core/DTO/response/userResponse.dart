@@ -1,27 +1,55 @@
 class UserResponse {
-  int id;
-  String name;
-  String email;
-  String avatar;
-  String phone;
-  UserResponse({required this.id, required this.name, required this.email, required this.avatar, required this.phone});
-  factory UserResponse.fromJson(Map<String, dynamic> json){
+  final int id;
+  final String username;
+  final String password;
+  final String email;
+  final String phone;
+  final List<dynamic> cartItemList;
+  final List<dynamic> favouriteList;
+  final String role;
+  final int otp;
+  final String? otpExpiration; // Để kiểu Nullable
+  final String avatar;
+  final bool enabled;
+  final bool accountNonLocked;
+  final bool credentialsNonExpired;
+  final bool accountNonExpired;
+
+  UserResponse({
+    required this.id,
+    required this.username,
+    required this.password,
+    required this.email,
+    required this.phone,
+    required this.cartItemList,
+    required this.favouriteList,
+    required this.role,
+    required this.otp,
+    this.otpExpiration,  // Có thể null
+    required this.avatar,
+    required this.enabled,
+    required this.accountNonLocked,
+    required this.credentialsNonExpired,
+    required this.accountNonExpired,
+  });
+
+  factory UserResponse.fromJson(Map<String, dynamic> json) {
     return UserResponse(
-        id: json['id'] as int,
-        name: json['name'] as String,
-        email: json['email'] as String,
-        avatar: json['avatar'] as String,
-        phone: json['phone'] as String
+      id: json['id'],
+      username: json['username'] ?? '',
+      password: '',
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
+      cartItemList: json['cartItemList'] ?? [],
+      favouriteList: json['favouriteList'] ?? [],
+      role: json['role'] ?? '',
+      otp: json['otp'] ?? 0,
+      otpExpiration: json['otpExpiration'],
+      avatar: json['avatar'] ?? '',
+      enabled: json['enabled'] ?? false,
+      accountNonLocked: json['accountNonLocked'] ?? true,
+      credentialsNonExpired: json['credentialsNonExpired'] ?? true,
+      accountNonExpired: json['accountNonExpired'] ?? true,
     );
   }
-  Map<String, dynamic> toJson(){
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'avatar': avatar
-    };
-  }
-
 }

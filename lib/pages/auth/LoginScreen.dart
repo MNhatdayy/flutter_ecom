@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       final response = await _authService.login(request);
       if (response != null) {
+        print(response.token);
         await _authService.saveToken(response.token);
         Navigator.pushReplacementNamed(context, '/home');
       } else {
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = "Error: $e";
+        _errorMessage = "$e";
       });
     } finally {
       setState(() {
@@ -67,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 32),
 
-            // Username input field
+            // Username input fzield
             TextField(
               controller: _usernameController,
               style: const TextStyle(color: Colors.white),
