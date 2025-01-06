@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/core/services/UploadService.dart';
 import 'package:flutter_ecom/core/services/UserService.dart';
+import 'package:flutter_ecom/pages/screens/profile/profile_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/DTO/request/UserRequest.dart';
@@ -64,7 +65,7 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
 
         // Nếu người dùng chọn ảnh mới, tải ảnh lên Firebase Storage
         if (_image != null) {
-          avatarUrl = await _uploadService.uploadImage(_image!);
+          avatarUrl = await _uploadService.uploadAvatar(_image!);
         } else {
           // Sử dụng URL hiện tại nếu không có ảnh mới
           avatarUrl = _avatarController.text;
@@ -73,21 +74,21 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
         if (avatarUrl != null) {
           // Tạo DTO để cập nhật thông tin người dùng
           UserRequest request = UserRequest(
-            name: _usernameController.text,
+            username: _usernameController.text,
             email: _emailController.text,
             phone: _phoneController.text,
             avatar: avatarUrl,
           );
 
           // Gửi yêu cầu cập nhật
-          await _userServices.UpdateUser(request);
+          await _userServices.UpdateUser(widget.user.id,request);
 
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Thông tin người dùng đã được cập nhật")),
           );
 
           // Quay lại màn hình trước
-          Navigator.pop(context);
+          Navigator.pop(context, true);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Lỗi khi tải lên ảnh đại diện")),

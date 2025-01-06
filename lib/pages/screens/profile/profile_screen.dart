@@ -8,8 +8,11 @@ import 'package:flutter_ecom/pages/screens/profile/user/updateuser_screen.dart';
 
 import '../../../core/services/AuthService.dart';
 
-
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+class _ProfileScreenState extends State<ProfileScreen> {
   final AuthService _authService = AuthService();
 
   Future<UserResponse> _fetchUserData() async {
@@ -124,7 +127,11 @@ class ProfileScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => UpdateUserScreen(user: user), // Passing user object to UpdateUserScreen
                         ),
-                      );
+                      ).then((value){
+                        if(value == true){
+                          setState(() {});
+                        }
+                      });
                     },
                   ),
                   ListTile(
