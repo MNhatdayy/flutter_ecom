@@ -9,7 +9,7 @@ class FavouriteService{
   Future<bool> FavouriteProduct(FavouriteRequest request) async {
     try{
       final response = await _baseClient.post(AppConfig.baseUrl, favouriteEnpoints().like, request);
-    if(response != null){
+    if(response == null){
         return true;
     }
     return false;
@@ -30,16 +30,16 @@ class FavouriteService{
       throw Exception('Lỗi');
     }
   }
-  Future<FavoriteResponse> GetFavouriteProduct(String name) async {
-    try{
-      final response = await _baseClient.get(AppConfig.baseUrl, favouriteEnpoints().get+ "/$name");
-      if(response != null){
-        final Map<String, dynamic> jsonResponse = jsonDecode(response);
-        return FavoriteResponse.fromJson(jsonResponse);
-      }else{
+  Future<List<FavoriteResponse>> GetFavouriteProduct(String userName) async {
+    try {
+      final response = await _baseClient.get(AppConfig.baseUrl, favouriteEnpoints().get + "/$userName");
+      if (response != null) {
+        final List<dynamic> jsonResponse = jsonDecode(response);
+        return jsonResponse.map((item) => FavoriteResponse.fromJson(item)).toList();
+      } else {
         throw Exception('Không nhận được phản hồi từ API');
       }
-    }catch (e){
+    } catch (e) {
       print(e);
       throw Exception('Lỗi trong quá trình lấy sản phẩm ưa thích');
     }

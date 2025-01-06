@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/pages/screens/favorite/favorite_screen.dart';
 
-import '../../screens/cartitem/cartitem_screen.dart';
+import '../../../core/services/AuthService.dart';
 
 class Headers extends StatelessWidget implements PreferredSizeWidget {
+  final AuthService _authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -39,13 +41,28 @@ class Headers extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: const Icon(Icons.favorite, color: Colors.white), // Biểu tượng yêu thích màu trắng
-          onPressed: () {
-            // Add your favorite button functionality here
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => FavoriteScreen()),
-            );
+          onPressed: () async {
+            final String? token = await _authService.getToken();
 
+            if (token != null) {
+              final username = await _authService.getCurrentUser(token);
+              print("Username: $username");
+              // Check if username is valid before passing it
+              if (username != null && username.username != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FavoriteScreen(userName: username.username),
+                  ),
+                );
+              } else {
+                // Handle the case where username is not valid or null
+                print("Username is null or invalid.");
+              }
+            } else {
+              // Handle the case where token is null
+              print("Token is null.");
+            }
           },
         ),
         const SizedBox(width: 10),
