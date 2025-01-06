@@ -1,14 +1,16 @@
+import 'package:flutter_ecom/core/DTO/response/ProductResponse.dart';
+
 class OrderDetailResponse {
   final int id;
   final int quantity;
   final int orderId;
-  final int productId;
+  final ProductResponse product;
 
   OrderDetailResponse({
     required this.id,
     required this.quantity,
     required this.orderId,
-    required this.productId,
+    required this.product,
   });
 
   factory OrderDetailResponse.fromJson(Map<String, dynamic> json) {
@@ -17,7 +19,7 @@ class OrderDetailResponse {
       id: json['id'] ?? 0,
       quantity: json['quantity'] ?? 0,
       orderId: json['orderId'] ?? 0,  // Make sure 'orderId' is correctly mapped
-      productId: json['productId'] ?? 0,  // Ensure 'productId' is correctly mapped
+      product: ProductResponse.fromJson(json['product'] ?? {}),  // Ensure 'productId' is correctly mapped
     );
   }
 }

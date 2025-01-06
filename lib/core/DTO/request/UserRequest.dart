@@ -1,13 +1,11 @@
 class UserRequest {
-  int id;
   String name;
   String email;
   String avatar;
   String phone;
-  UserRequest({required this.id, required this.name, required this.email, required this.avatar, required this.phone});
+  UserRequest({ required this.name, required this.email, required this.avatar, required this.phone});
   factory UserRequest.fromJson(Map<String, dynamic> json){
     return UserRequest(
-        id: json['id'] as int,
         name: json['name'] as String,
         email: json['email'] as String,
         avatar: json['avatar'] as String,
@@ -16,7 +14,6 @@ class UserRequest {
   }
   Map<String, dynamic> toJson(){
     return {
-      'id': id,
       'name': name,
       'email': email,
       'phone': phone,
