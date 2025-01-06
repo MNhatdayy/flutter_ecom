@@ -148,8 +148,12 @@ class _CartItemScreenState extends State<CartItemScreen> {
                               CircleAvatar(
                                 backgroundColor: Colors.grey.shade200,
                                 radius: 30,
-                                child: const Icon(Icons.shopping_bag,
-                                    color: Colors.blue, size: 30),
+                                backgroundImage: (item.product.imageUrl != null && item.product.imageUrl!.isNotEmpty)
+                                    ? NetworkImage(item.product.imageUrl!)
+                                    : null,
+                                child: (item.product.imageUrl == null || item.product.imageUrl!.isEmpty)
+                                    ? const Icon(Icons.shopping_bag, size: 40, color: Colors.black)
+                                    : null,
                               ),
                               const SizedBox(width: 15),
                               Expanded(

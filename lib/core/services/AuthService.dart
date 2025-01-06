@@ -95,7 +95,7 @@ class AuthService {
 
     // Kiểm tra xem token còn hạn hay không
     bool isExpired = JwtDecoder.isExpired(token);
-
+    print(token);
     return !isExpired;
   }
 }

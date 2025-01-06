@@ -45,7 +45,7 @@ class ExploreScreen extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height:10),
 
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -324,7 +324,7 @@ class ExploreScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: 300,
+                        height: 340,
                         child: PageView.builder(
                           controller: PageController(viewportFraction: 0.8),
                           itemCount: (products.length / 2).ceil(),
