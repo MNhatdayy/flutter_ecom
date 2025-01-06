@@ -3,12 +3,14 @@ class ProductResponse {
   final String name;
   final String? imageUrl;
   final double price;
+  final String description;
 
   ProductResponse({
     required this.id,
     required this.name,
     this.imageUrl,
     required this.price,
+    required this.description
   });
 
   factory ProductResponse.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,16 @@ class ProductResponse {
           ? (json['price'] as int).toDouble()
           : double.parse(json['price'].toString()),
       imageUrl: json['imageUrl'] as String?,
+      description: json['description'] as String,
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'imageUrl':imageUrl,
+      'description': description,
+    };
   }
 }

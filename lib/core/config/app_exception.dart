@@ -4,9 +4,7 @@ class AppException implements Exception {
   final String? url;
 
   AppException([this.message, this.process, this.url]);
-
 }
-
 class BadRequestException extends AppException
 {
   BadRequestException([String? message, String? url]):super(message, 'Bad Request', url);

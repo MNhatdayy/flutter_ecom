@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecom/core/DTO/response/userResponse.dart';
 import 'package:flutter_ecom/pages/screens/address/address_screen.dart';
 import 'package:flutter_ecom/pages/screens/cartitem/cartitem_screen.dart';
+import 'package:flutter_ecom/pages/screens/order/listorder_screen.dart';
 
 import '../../../core/services/AuthService.dart';
+
 
 class ProfileScreen extends StatelessWidget {
   final AuthService _authService = AuthService();
@@ -127,10 +129,37 @@ class ProfileScreen extends StatelessWidget {
                     leading: const Icon(Icons.shopping_cart, color: Colors.black),
                     title: const Text("Giỏ hàng", style: TextStyle(color: Colors.black)),
                     subtitle: const Text("Thêm và xóa sản phẩm khỏi giỏ hàng", style: TextStyle(color: Colors.grey)),
+                    onTap: () async {
+                      final String? token = await _authService.getToken();
+                      if (token != null) {
+                        final username = await _authService.getCurrentUser(token);
+                        print("Username: $username");
+                        // Check if username is valid before passing it
+                        if (username != null && username.username != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CartItemScreen(username: username.username),
+                            ),
+                          );
+                        } else {
+                          // Handle the case where username is not valid or null
+                          print("Username is null or invalid.");
+                        }
+                      } else {
+                        // Handle the case where token is null
+                        print("Token is null.");
+                      }
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.history, color: Colors.black),
+                    title: const Text("Lịch sử đơn hàng", style: TextStyle(color: Colors.black)),
+                    subtitle: const Text("Xem lịch sử các đơn hàng của bạn", style: TextStyle(color: Colors.grey)),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CartItemScreen()),
+                        MaterialPageRoute(builder: (context) => ListOrderScreen(username: user.username,)), // Chuyển đến OrderHistoryScreen
                       );
                     },
                   ),

@@ -51,7 +51,7 @@ class ProductService {
   }
   Future<List<ProductResponse>> GetProductByName(String name) async {
     try{
-      final response = await _baseClient.get(AppConfig.baseUrl, productEndpoints().getByName +"name");
+          final response = await _baseClient.get(AppConfig.baseUrl, productEndpoints().getByName+"$name");
       if (response != null) {
         final List<dynamic> jsonResponse = jsonDecode(response);
         return jsonResponse.map((json) => ProductResponse.fromJson(json)).toList();

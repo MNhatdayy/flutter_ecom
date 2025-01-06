@@ -9,7 +9,7 @@ class FavouriteService{
   Future<bool> FavouriteProduct(FavouriteRequest request) async {
     try{
       final response = await _baseClient.post(AppConfig.baseUrl, favouriteEnpoints().like, request);
-    if(response){
+    if(response != null){
         return true;
     }
     return false;
@@ -21,7 +21,7 @@ class FavouriteService{
   Future<bool> UnlikeProduct(FavouriteRequest request) async {
     try{
       final response = await _baseClient.post(AppConfig.baseUrl, favouriteEnpoints().unlike, request);
-      if(response){
+      if(response != null){
         return true;
       }
       return false;
@@ -33,7 +33,7 @@ class FavouriteService{
   Future<FavoriteResponse> GetFavouriteProduct(String name) async {
     try{
       final response = await _baseClient.get(AppConfig.baseUrl, favouriteEnpoints().get+ "/$name");
-      if(response){
+      if(response != null){
         final Map<String, dynamic> jsonResponse = jsonDecode(response);
         return FavoriteResponse.fromJson(jsonResponse);
       }else{

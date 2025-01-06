@@ -8,6 +8,13 @@ class CartRequest {
     required this.productId,
     required this.quantity,
   });
+  factory CartRequest.fromJson(Map<String, dynamic> json) {
+    return CartRequest(
+      username: json['username'] as String,
+      productId: json['productId'] as int,
+      quantity: json['quantity'] as int,
+    );
+  }
 
   // Phương thức chuyển đổi đối tượng thành JSON
   Map<String, dynamic> toJson() {
