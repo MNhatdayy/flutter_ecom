@@ -177,7 +177,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///C:/Application/flutter/packages/flutter",
+      "rootUri": "file:///C:/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -207,13 +207,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///C:/Application/flutter/packages/flutter_test",
+      "rootUri": "file:///C:/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///C:/Application/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///C:/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -294,6 +294,12 @@
       "rootUri": "file:///C:/Users/Admin/AppData/Local/Pub/Cache/hosted/pub.dev/json_annotation-4.9.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "jwt_decoder",
+      "rootUri": "file:///C:/Users/Admin/AppData/Local/Pub/Cache/hosted/pub.dev/jwt_decoder-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "leak_tracker",
@@ -435,7 +441,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///C:/Application/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///C:/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -524,10 +530,10 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-01-02T03:38:46.123231Z",
+  "generated": "2025-01-06T07:13:44.099109Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
-  "flutterRoot": "file:///C:/Application/flutter",
+  "flutterRoot": "file:///C:/flutter",
   "flutterVersion": "3.24.5",
   "pubCache": "file:///C:/Users/Admin/AppData/Local/Pub/Cache"
 }

@@ -4,7 +4,7 @@ class CartResponse {
   final int id;
   final String username;
   final ProductResponse product;
-  late final int quantity;
+  int quantity;
 
   CartResponse({
     required this.id,

@@ -65,7 +65,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
       0, (sum, item) => sum + (item.product.price * item.quantity));
 
   void _updateCartItem(CartResponse item, int change) async {
-    int newQuantity = item.quantity + change;
+    final int newQuantity = item.quantity + change;
 
     // Remove item if quantity <= 0
     if (newQuantity <= 0) {
@@ -74,9 +74,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
     }
 
     try {
-      setState(() {
-        item.quantity = newQuantity;
-      });
+
 
       bool success = await _cartService.UpdateCart(
           item.id,          // cartId
@@ -84,13 +82,14 @@ class _CartItemScreenState extends State<CartItemScreen> {
           item.product.id,  // productId
           newQuantity       // quantity
       );
-
+      setState(() {
+        item.quantity = newQuantity;
+        print("Update quantity");
+      });
       // Check if the update was successful
       if (!success) {
         // Rollback the UI update if the service fails
-        setState(() {
-          item.quantity -= change;
-        });
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Không thể cập nhật số lượng sản phẩm")),
         );
