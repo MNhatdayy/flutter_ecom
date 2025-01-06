@@ -16,6 +16,7 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int currentIndex = 0;
 
+
   // Remove FavoriteScreen and update the list of screens
   final List<Widget> _screens = [
     ExploreScreen(),
@@ -37,7 +38,7 @@ class _NavigationState extends State<Navigation> {
       body: _screens[currentIndex],
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          color: Colors.white, // Màu nền trắng chung
+          color: Colors.white,
         ),
         child: SnakeNavigationBar.color(
           behaviour: SnakeBarBehaviour.floating,
@@ -45,11 +46,11 @@ class _NavigationState extends State<Navigation> {
           padding: const EdgeInsets.symmetric(vertical: 5),
           unselectedLabelStyle: const TextStyle(fontSize: 11, color: Colors.black54),
           selectedLabelStyle: const TextStyle(fontSize: 11, color: Colors.black),
-          snakeViewColor: Colors.white, // Màu nền cho biểu tượng được chọn
-          unselectedItemColor: Colors.black54, // Màu biểu tượng không được chọn
-          selectedItemColor: Colors.black, // Màu biểu tượng khi được chọn
+          snakeViewColor: Colors.white,
+          unselectedItemColor: Colors.black54,
+          selectedItemColor: Colors.black,
           showUnselectedLabels: true,
-          backgroundColor: Colors.white, // Nền thanh điều hướng là màu trắng
+          backgroundColor: Colors.white,
           currentIndex: currentIndex,
           onTap: _onTap,
           items: const [

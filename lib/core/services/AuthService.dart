@@ -54,7 +54,7 @@ class AuthService {
     };
     try{
       var response =  await _baseClient.post(AppConfig.baseUrl,authEnpoints().me, payload);
-      if (response) {
+      if (response != null) {
         final Map<String, dynamic> jsonResponse = jsonDecode(response);
         print(jsonResponse);
         return UserResponse.fromJson(jsonResponse);

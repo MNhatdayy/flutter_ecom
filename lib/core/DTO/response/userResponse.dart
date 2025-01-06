@@ -37,7 +37,7 @@ class UserResponse {
     return UserResponse(
       id: json['id'],
       username: json['username'] ?? '',
-      password: '',
+      password: json['password'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
       cartItemList: json['cartItemList'] ?? [],

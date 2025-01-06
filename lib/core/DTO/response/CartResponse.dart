@@ -1,20 +1,33 @@
+import 'package:flutter_ecom/core/DTO/response/ProductResponse.dart';
+
 class CartResponse {
+  final int id;
   final String username;
-  final int productId;
-  final int quantity;
+  final ProductResponse product;
+  late final int quantity;
 
   CartResponse({
+    required this.id,
     required this.username,
-    required this.productId,
+    required this.product,
     required this.quantity,
   });
 
-  // Factory method để tạo instance từ JSON
   factory CartResponse.fromJson(Map<String, dynamic> json) {
     return CartResponse(
+      id: json['id'],
       username: json['username'] ?? '',
-      productId: json['productId'] ?? 0,
+      product: ProductResponse.fromJson(json['product']),
       quantity: json['quantity'] ?? 0,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'username': username,
+      'product': product.toJson(),
+      'quantity': quantity,
+    };
   }
 }

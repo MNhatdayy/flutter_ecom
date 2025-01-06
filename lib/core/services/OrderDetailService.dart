@@ -10,6 +10,7 @@ class OrderDetailService {
     try {
       final response = await _baseClient.get(AppConfig.baseUrl, orderDetailEndpoints().getById+"/$id");
       if (response != null) {
+
         final List<dynamic> jsonResponse = jsonDecode(response);
         return jsonResponse.map((json) => OrderDetailResponse.fromJson(json)).toList();
       } else {
