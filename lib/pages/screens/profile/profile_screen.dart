@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/core/DTO/response/userResponse.dart';
-import 'package:flutter_ecom/pages/screens/address/address_screen.dart';
 import 'package:flutter_ecom/pages/screens/cartitem/cartitem_screen.dart';
 import 'package:flutter_ecom/pages/screens/order/listorder_screen.dart';
+import 'package:flutter_ecom/pages/screens/profile/user/updateuser_screen.dart';
 
 import '../../../core/services/AuthService.dart';
 
@@ -115,13 +115,15 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.location_on, color: Colors.black),
-                    title: const Text("Địa chỉ", style: TextStyle(color: Colors.black)),
-                    subtitle: const Text("Thêm địa chỉ giao hàng", style: TextStyle(color: Colors.grey)),
+                    leading: const Icon(Icons.person, color: Colors.black), // Icon for user profile
+                    title: const Text("Cập nhật thông tin cá nhân", style: TextStyle(color: Colors.black)),
+                    subtitle: const Text("Chỉnh sửa thông tin người dùng của bạn", style: TextStyle(color: Colors.grey)),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AddressScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => UpdateUserScreen(user: user), // Passing user object to UpdateUserScreen
+                        ),
                       );
                     },
                   ),
