@@ -65,7 +65,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
       0, (sum, item) => sum + (item.product.price * item.quantity));
 
   void _updateCartItem(CartResponse item, int change) async {
-    int newQuantity = item.quantity + change;
+    final int newQuantity = item.quantity + change;
 
     // Remove item if quantity <= 0
     if (newQuantity <= 0) {
@@ -74,9 +74,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
     }
 
     try {
-      setState(() {
-        item.quantity = newQuantity;
-      });
+
 
       bool success = await _cartService.UpdateCart(
           item.id,          // cartId
@@ -84,13 +82,14 @@ class _CartItemScreenState extends State<CartItemScreen> {
           item.product.id,  // productId
           newQuantity       // quantity
       );
-
+      setState(() {
+        item.quantity = newQuantity;
+        print("Update quantity");
+      });
       // Check if the update was successful
       if (!success) {
         // Rollback the UI update if the service fails
-        setState(() {
-          item.quantity -= change;
-        });
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Không thể cập nhật số lượng sản phẩm")),
         );
@@ -149,8 +148,12 @@ class _CartItemScreenState extends State<CartItemScreen> {
                               CircleAvatar(
                                 backgroundColor: Colors.grey.shade200,
                                 radius: 30,
-                                child: const Icon(Icons.shopping_bag,
-                                    color: Colors.blue, size: 30),
+                                backgroundImage: (item.product.imageUrl != null && item.product.imageUrl!.isNotEmpty)
+                                    ? NetworkImage(item.product.imageUrl!)
+                                    : null,
+                                child: (item.product.imageUrl == null || item.product.imageUrl!.isEmpty)
+                                    ? const Icon(Icons.shopping_bag, size: 40, color: Colors.black)
+                                    : null,
                               ),
                               const SizedBox(width: 15),
                               Expanded(

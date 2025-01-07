@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/pages/auth/LoginScreen.dart';
 
 class ContactScreen extends StatefulWidget {
   @override
@@ -116,6 +117,31 @@ class _ContactScreenState extends State<ContactScreen> {
                   backgroundColor: Colors.black,
               ),
 
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size(double.infinity, 45),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(
+                      ),
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Đăng xuất",
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+              ),
             ),
           ],
         ),

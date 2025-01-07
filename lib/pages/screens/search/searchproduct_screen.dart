@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/pages/screens/cartitem/cartitem_screen.dart';
 import '../../../core/DTO/response/ProductResponse.dart';
+import '../../../core/config/number_formart.dart';
 import '../../../core/services/CartService.dart';
 import '../detail/productdetail_screen.dart';
 
@@ -57,7 +58,7 @@ class SearchProductScreen extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                "Giá: ${product.price.toStringAsFixed(2)} VND",
+                formatCurrency(product.price),
                 style: const TextStyle(color: Colors.black54),
               ),
               trailing: IconButton(
@@ -73,6 +74,7 @@ class SearchProductScreen extends StatelessWidget {
                             const Icon(Icons.check_circle, color: Colors.green),
                             const SizedBox(width: 8),
                             Text("Đã thêm vào giỏ hàng."),
+
                           ],
                         ),
                         backgroundColor: Colors.black87,

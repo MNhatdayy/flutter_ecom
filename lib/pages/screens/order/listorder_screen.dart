@@ -53,7 +53,7 @@ class _OrderListScreenState extends State<ListOrderScreen> {
                 return ListTile(
                   title: Text("Mã đơn hàng: ${order.id}"),
                   subtitle: Text(
-                      "Tên khách hàng: ${order.customerName}\nĐịa chỉ: ${order.customerAddress}\nSố điện thoại: ${order.customerPhone}"),
+                      "Tên khách hàng: ${order.customerName}\nĐịa chỉ: ${order.customerAddress}\nSố điện thoại: ${order.customerPhone}\nPhương thức thanh toán: ${order.paymentType}"),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     Navigator.push(

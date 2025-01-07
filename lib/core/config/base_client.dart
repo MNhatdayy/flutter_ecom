@@ -81,7 +81,27 @@ class BaseClient {
       throw ApiNotRespondingException('API not responded in time', uri.toString());
     }
   }
+  Future<dynamic> postformData(String baseUrl, String api, {File? file}) async {
+    var uri = Uri.parse(baseUrl + api);
 
+    try {
+      var request = http.MultipartRequest('POST', uri);
+
+      if (file != null) {
+        request.files.add(await http.MultipartFile.fromPath('file', file.path));
+      }
+      var response = await request.send().timeout(Duration(seconds: 30));
+      if (response.statusCode == 200) {
+        return response.stream.bytesToString();
+      } else {
+        throw Exception('Failed with status code: ${response.statusCode}');
+      }
+    } on SocketException {
+      throw FetchDataException('No Internet connection', uri.toString());
+    } on TimeoutException {
+      throw ApiNotRespondingException('API not responded in time', uri.toString());
+    }
+  }
 
 
   dynamic _processResponse(http.Response response){
@@ -101,5 +121,6 @@ class BaseClient {
         FetchDataException(utf8.decode(response.bodyBytes), response.request?.url.toString());
     }
   }
+  //post formData
 
 }

@@ -5,17 +5,21 @@ import 'package:flutter_ecom/pages/HomeScreen.dart';
 import 'package:flutter_ecom/pages/auth/RegisterScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
+import 'package:flutter_ecom/core/services/AuthService.dart';
 void main() async{
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  runApp( MyApp());
-}
+  FirebaseAppCheck.instance.activate();
+  bool logedIn = await AuthService().isTokenValid();
+    runApp(MyApp(logedIn: logedIn));
+  }
 
 class MyApp extends StatelessWidget {
+  final bool logedIn;
+  MyApp({required this.logedIn});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +28,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/login',
+
+      home: logedIn ? HomeScreen() : LoginScreen(),
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),

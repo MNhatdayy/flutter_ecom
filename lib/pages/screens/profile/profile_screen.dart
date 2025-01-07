@@ -7,9 +7,14 @@ import 'package:flutter_ecom/pages/screens/order/listorder_screen.dart';
 import 'package:flutter_ecom/pages/screens/profile/user/updateuser_screen.dart';
 
 import '../../../core/services/AuthService.dart';
+import '../../../core/services/UserService.dart';
+import '../../auth/LoginScreen.dart';
 
-
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+class _ProfileScreenState extends State<ProfileScreen> {
   final AuthService _authService = AuthService();
 
   Future<UserResponse> _fetchUserData() async {
@@ -124,7 +129,11 @@ class ProfileScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => UpdateUserScreen(user: user), // Passing user object to UpdateUserScreen
                         ),
-                      );
+                      ).then((value){
+                        if(value == true){
+                          setState(() {});
+                        }
+                      });
                     },
                   ),
                   ListTile(
@@ -136,7 +145,6 @@ class ProfileScreen extends StatelessWidget {
                       if (token != null) {
                         final username = await _authService.getCurrentUser(token);
                         print("Username: $username");
-                        // Check if username is valid before passing it
                         if (username != null && username.username != null) {
                           Navigator.push(
                             context,
@@ -145,11 +153,9 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           );
                         } else {
-                          // Handle the case where username is not valid or null
                           print("Username is null or invalid.");
                         }
                       } else {
-                        // Handle the case where token is null
                         print("Token is null.");
                       }
                     },
@@ -163,6 +169,83 @@ class ProfileScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(builder: (context) => ListOrderScreen(username: user.username,)), // Chuyển đến OrderHistoryScreen
                       );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.delete_forever, color: Colors.red),
+                    title: const Text("Xóa tài khoản", style: TextStyle(color: Colors.black)),
+                    subtitle: const Text("Xóa tài khoản vĩnh viễn", style: TextStyle(color: Colors.grey)),
+                    onTap: () async {
+                      final userId = snapshot.data?.id;
+                      if (userId != null) {
+                        final shouldDelete = await showDialog<bool>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Xác nhận'),
+                              content: const Text('Bạn có chắc chắn muốn xóa tài khoản không? Tài khoản sẽ bị xóa vĩnh viễn.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: const Text('Hủy'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: const Text('Xóa'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                        if (shouldDelete == true) {
+                          try {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            );
+                            final result = await UserServices().Delete(userId);
+
+                            if (result) {
+                              await _authService.deleteToken();
+
+                              Navigator.of(context).pop();
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Xóa tài khoản thành công. Đang chuyển về trang đăng nhập...')),
+                              );
+                              await Future.delayed(const Duration(seconds: 2));
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(
+                                  ),
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Không thể xóa tài khoản.')),
+                            );
+                          }
+                        }
+                      } else {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Không thể lấy thông tin người dùng.')),
+                        );
+                      }
                     },
                   ),
                   // Các mục khác...

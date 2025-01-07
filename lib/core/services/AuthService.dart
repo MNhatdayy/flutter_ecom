@@ -2,7 +2,7 @@ import 'package:flutter_ecom/core/DTO/request/auth/LoginRequest.dart';
 import 'package:flutter_ecom/core/DTO/request/auth/RegisterRequest.dart';
 import 'package:flutter_ecom/core/DTO/response/auth/TokenResponse.dart';
 import 'package:flutter_ecom/core/DTO/response/userResponse.dart';
-
+import 'package:jwt_decoder/jwt_decoder.dart';
 import '../utils/api/auth.api.dart';
 import '../config/base_client.dart';
 import '../config/config.dart';
@@ -56,9 +56,7 @@ class AuthService {
       var response =  await _baseClient.post(AppConfig.baseUrl,authEnpoints().me, payload);
       if (response != null) {
         final Map<String, dynamic> jsonResponse = jsonDecode(response);
-        print(jsonResponse);
         return UserResponse.fromJson(jsonResponse);
-
       } else {
         throw Exception('Không nhận được phản hồi từ API');
       }
@@ -84,5 +82,19 @@ class AuthService {
   Future<void> deleteToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
+  }
+
+  Future<bool> isTokenValid() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+
+    if (token == null) {
+      return false; // Không có token
+    }
+
+    // Kiểm tra xem token còn hạn hay không
+    bool isExpired = JwtDecoder.isExpired(token);
+    print(token);
+    return !isExpired;
   }
 }
