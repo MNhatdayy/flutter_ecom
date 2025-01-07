@@ -3,6 +3,7 @@ import 'package:flutter_ecom/core/DTO/request/FavouriteRequest.dart';
 import 'package:flutter_ecom/core/DTO/response/FavouriteResponse.dart';
 import '../../../core/config/number_formart.dart';
 import '../../../core/services/FavouriteSerivce.dart';
+import '../detail/productdetail_screen.dart';
 
 class FavoriteScreen extends StatefulWidget {
   final String userName;
@@ -34,21 +35,47 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   void _removeFavorite(int productId) async {
     try {
-      final request = FavouriteRequest(
-          productId: productId, username: widget.userName);
-      bool success = await _favouriteService.UnlikeProduct(request);
-      if (success) {
-        setState(() {
-          _favoriteProducts = _loadFavorites();
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Đã xóa khỏi danh sách yêu thích!")),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(
-              "Không thể xóa sản phẩm khỏi danh sách yêu thích.")),
-        );
+      // Hiển thị hộp thoại xác nhận
+      bool? confirmDelete = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Xác nhận xóa"),
+            content: const Text("Bạn có chắc chắn muốn xóa sản phẩm khỏi danh sách yêu thích?"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false); // Đóng hộp thoại và trả về false
+                },
+                child: const Text("Hủy"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Đóng hộp thoại và trả về true
+                },
+                child: const Text("Xóa"),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (confirmDelete == true) {
+        final request = FavouriteRequest(
+            productId: productId, username: widget.userName);
+        bool success = await _favouriteService.UnlikeProduct(request);
+        if (success) {
+          setState(() {
+            _favoriteProducts = _loadFavorites();
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Đã xóa khỏi danh sách yêu thích!")),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Không thể xóa sản phẩm khỏi danh sách yêu thích.")),
+          );
+        }
       }
     } catch (e) {
       print("Error removing favorite: $e");
@@ -95,6 +122,16 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
                 elevation: 3,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                          ProductDetailScreen(product: favorite.product),
+                      ),
+                    );
+                  },
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Row(
@@ -140,6 +177,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     ],
                   ),
                 ),
+              ),
               );
             },
           );

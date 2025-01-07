@@ -118,6 +118,8 @@ class _ContactScreenState extends State<ContactScreen> {
               ),
 
             ),
+
+            const SizedBox(height: 50),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
               child: ElevatedButton(
