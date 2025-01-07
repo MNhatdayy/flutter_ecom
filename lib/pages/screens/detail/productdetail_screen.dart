@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/core/DTO/response/ProductResponse.dart';
+import 'package:flutter_ecom/core/services/AuthService.dart';
 import 'package:flutter_ecom/core/services/CartService.dart';
+import 'package:flutter_ecom/pages/screens/favorite/favorite_screen.dart';
 
+import '../../../core/DTO/request/FavouriteRequest.dart';
 import '../../../core/config/number_formart.dart';
+import '../../../core/services/FavouriteSerivce.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final ProductResponse product;
@@ -51,10 +55,45 @@ class ProductDetailScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Đã thêm vào yêu thích")),
-                      );
+                    onPressed: () async {
+                      try {
+                        final AuthService _authService = AuthService();
+                        final String? token = await _authService.getToken();
+                        final user = await _authService.getCurrentUser(token);
+
+
+                        final request = FavouriteRequest(productId: product.id, username: user.username);
+
+                        bool success = await FavouriteService().FavouriteProduct(request);
+                        if (success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Đã thêm vào danh sách yêu thích."),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Thêm vào danh sách yêu thích thất bại."),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              children: [
+                                const Icon(Icons.error, color: Colors.red),
+                                const SizedBox(width: 8),
+                                Text("Có lỗi xảy ra: $e"),
+                              ],
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
@@ -110,7 +149,7 @@ class ProductDetailScreen extends StatelessWidget {
                               children: [
                                 const Icon(Icons.error, color: Colors.red),
                                 const SizedBox(width: 8),
-                                Text("Có lỗi xảy ra: $e"),
+                                Text("Có lỗi xảy ra: "),
                               ],
                             ),
                             backgroundColor: Colors.red,

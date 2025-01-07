@@ -25,7 +25,7 @@ class UserServices{
   Future<bool> Delete(int id) async{
     try{
       final response = await _baseClient.delete(AppConfig.baseUrl, userEnpoints().deleteUser+"/$id");
-      if(response != null){
+      if(response == null){
         return true;
       }else{
         throw Exception('Không nhận được phản hồi từ server');

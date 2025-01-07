@@ -1,20 +1,22 @@
+import 'package:flutter_ecom/core/DTO/response/ProductResponse.dart';
+import 'package:flutter_ecom/core/DTO/response/userResponse.dart';
+
 class FavoriteResponse {
-  final String imageUrl;
-  final String name;
-  final double price;
+  final int id;
+  final ProductResponse product;
+  final UserResponse user;
 
   FavoriteResponse({
-    required this.imageUrl,
-    required this.name,
-    required this.price,
+    required this.id,
+    required this.product,
+    required this.user,
   });
 
-  // Factory method to create an instance from JSON
   factory FavoriteResponse.fromJson(Map<String, dynamic> json) {
     return FavoriteResponse(
-      imageUrl: json['product']['imageUrl'] ?? '',
-      name: json['product']['name'] ?? '',
-      price: json['product']['price']?.toDouble() ?? 0.0,
+      id: json['id'],
+      product: ProductResponse.fromJson(json['product']),
+      user: UserResponse.fromJson(json['user']),
     );
   }
 }

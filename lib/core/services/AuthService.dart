@@ -57,7 +57,6 @@ class AuthService {
       if (response != null) {
         final Map<String, dynamic> jsonResponse = jsonDecode(response);
         return UserResponse.fromJson(jsonResponse);
-
       } else {
         throw Exception('Không nhận được phản hồi từ API');
       }
